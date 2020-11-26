@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Морские круизы</title>
+  <link href="style.css" rel="stylesheet"></head>
+  <body class="site">
+    <header class="site__header page-header">
+      <div class="container">
+        <div class="page-header__inner">
+          <nav class="page-header__menu main-menu">
+            <ul class="main-menu__list">
+                          <li class="main-menu__item"><a class="main-menu__link" href="#">Популярные маршруты</a></li>
+                          <li class="main-menu__item"><a class="main-menu__link" href="#">Расписание рейсов</a></li>
+                          <li class="main-menu__item"><a class="main-menu__link" href="#">Забранированные рейсы</a></li>
+                          <li class="main-menu__item"><a class="main-menu__link" href="#">Вход для партнеров</a></li>
+                          <li class="main-menu__item"><a class="main-menu__link" href="#">О компании</a></li>
+                          <li class="main-menu__item"><a class="main-menu__link" href="#">Контакты</a></li>
+            </ul>
+            <button class="btn main-menu__btn" data-togglr-target=".main-menu__list" data-togglr-toggle="main-menu__list--opened"><span class="visually-hidden">Открыть меню</span><span class="btn__line"></span></button>
+          </nav>
+          <div class="page-header__actions actions">
+            <div class="actions__login login">
+              <button class="btn login__btn" data-togglr-target=".login__content" data-togglr-toggle="login__content--opened"> Личный кабинет</button>
+              <div class="login__content"><a class="login__link" href="#">Регистрация</a><a class="login__link" href="#">Войти</a></div>
+            </div>
+            <div class="actions__currency currency">
+              <button class="btn currency__btn" data-togglr-target=".currency__content" data-togglr-toggle="currency__content--opened">Рубль</button>
+              <div class="currency__content"><a class="currency__link" href="#">Рубль</a><a class="currency__link" href="#">Евро</a></div>
+            </div>
+            <div class="language actions__language">
+              <button class="btn language__btn" data-togglr-target=".language__content" data-togglr-toggle="language__content--opened">Ru</button>
+              <div class="language__content"><a class="language__link" href="#">Русский</a><a class="language__link" href="#">English</a></div>
+            </div>
+            <div class="actions__contacts contacts"><a class="contacts__phone" href="tel:88005006105">8 800 500-61-05</a>
+              <p class="contacts__text">Круглосуточная поддержка</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="site__main-content main-content">
+      <div class="main-content__intro intro">
+        <div class="container">
+          <div class="intro__logo logo">
+            <picture>
+              <source srcset="images/logo-d.png" media="(min-width:1200px)"><img class="logo__img" src="images/logo.png" alt="logo">
+            </picture>
+          </div>
+          <h1 class="intro__title main-title"><span class="main-title__text main-title__text--small">Морские прогулки</span><span class="main-title__text main-title__text--big"> по чёрному морю</span></h1><a class="btn main-content__btn intro__btn" href="#">Выбрать круиз</a>
+          <picture>
+            <source srcset="images/line-d.png" media="(min-width: 1200px)"><img class="intro__img" src="images/line.png" alt="Пунктирная линия">
+          </picture>
+        </div>
+      </div>
+      <div class="main-content__catalog catalog">
+        <div class="container">
+          <h2 class="catalog__title">Каталог круизов</h2>
+          <p class="catalog__sort">Сортировать круизы по&nbsp;цене</p>
+          <div class="catalog__cards">
+            <section class="card catalog__card catalog__card--big">
+              <div class="card__pictures"><img class="card__img card__img--mobile" src="images/anapa.jpg" alt="Анапа"><img class="card__img card__img--tab" src="images/anapa-tab.jpg" alt="Анапа"><img class="card__img card__img--dsk" src="images/anapa-d.jpg" alt="Анапа"></div>
+              <p class="card__tag card__tag--blue">Хит продаж</p>
+              <div class="card__content">
+                <h2 class="card__title"><a class="card__link" href="#">Морская прогулка в&nbsp;Анапу</a></h2>
+                <div class="card__description description">
+                  <dl class="description__row">
+                    <dt class="description__text description__text--bold">Маршрут:</dt>
+                    <dd class="description__text">Сочи-Лазаревское-Геленджик-Анапа</dd>
+                  </dl>
+                  <dl class="description__row">
+                    <dt class="description__text description__text--bold"> Продолжительность:</dt>
+                    <dd class="description__text">10&nbsp;ч.&nbsp;0&nbsp;мин</dd>
+                  </dl>
+                </div>
+                <div class="card__price">
+                  <p class="price__value price__value--current">49&nbsp;000&nbsp;руб.</p>
+                </div>
+              </div>
+            </section>
+            <section class="card catalog__card catalog__card--desktop-col">
+              <div class="card__pictures"><img class="card__img card__img--mobile" src="images/sochi.jpg" alt="Сочи"><img class="card__img card__img--tab" src="images/sochi-tab.jpg" alt="Сочи"><img class="card__img card__img--dsk" src="images/sochi-d.jpg" alt="Сочи"></div>
+              <p class="card__tag card__tag--pink card__tag--position">Акция</p>
+              <div class="card__content">
+                <h2 class="card__title card__title--different-width"><a class="card__link" href="#">Обзорная морская прогулка с&nbsp;экскурсией</a></h2>
+                <div class="card__description description">
+                  <dl class="description__row">
+                    <dt class="description__text description__text--bold">Маршрут:</dt>
+                    <dd class="description__cell description__text">Сочи-Адлер-Сочи (без&nbsp;высадки)</dd>
+                  </dl>
+                  <dl class="description__row">
+                    <dt class="description__text description__text--bold">Продолжительность:</dt>
+                    <dd class="description__text">1 ч. 0 мин</dd>
+                  </dl>
+                </div>
+                <div class="card__price price">
+                  <p class="price__value price__value--current">5 000 руб.</p>
+                  <p class="price__value price__value--prev">15000 руб.</p>
+                </div>
+              </div>
+            </section>
+            <section class="card catalog__card catalog__card--tablet-col">
+              <div class="card__pictures"><img class="card__img card__img--mobile" src="images/Gel.jpg" alt="Геленджик"><img class="card__img card__img--tab" src="images/Gel-tab.jpg" alt="Геленджик"><img class="card__img card__img--dsk" src="images/Gel-d.jpg" alt="Геленджик"></div>
+              <p class="tag card__tag card__tag--pink">Скидка<span class="tag__text">10&#37;</span></p>
+              <div class="card__content">
+                <h2 class="card__title"><a class="card__link" href="#">Морская прогулка в&nbsp;Геленджик</a></h2>
+                <div class="card__description description card__description--different-margin">
+                  <dl class="description__row">
+                    <dt class="description__text description__text--bold">Маршрут:</dt>
+                    <dd class="description__text">Cочи-Туапсе-Геленджик</dd>
+                  </dl>
+                  <dl class="description__row">
+                    <dt class="description__text description__text--bold">Продолжительность:</dt>
+                    <dd class="description__text">12 ч. 30 мин</dd>
+                  </dl>
+                </div>
+                <div class="card__price price">
+                  <p class="price__value price__value--current">7 000 руб.</p>
+                  <p class="price__value price__value--prev">10000 руб.</p>
+                </div>
+              </div>
+            </section>
+            <section class="card catalog__card catalog__card--last-of-the-mobile">
+              <div class="card__pictures"><img class="card__img card__img--mobile" src="images/nov.jpg" alt="Новороссийск"><img class="card__img card__img--tab" src="images/nov-tab.jpg" alt="Новороссийск"><img class="card__img card__img--dsk" src="images/nov-d.jpg" alt="Новороссийск"></div>
+              <div class="card__content">
+                <h2 class="card__title"><a class="card__link" href="#">Морской круиз в&nbsp;Новороссийск</a></h2>
+                <div class="description card__description">
+                  <dl class="description__row">
+                    <dt class="description__text description__text--bold">Маршрут:</dt>
+                    <dd class="description__text">Cочи-Геленджик-Новороссийск-Геленджик-&nbsp;Сочи</dd>
+                  </dl>
+                  <dl class="description__row">
+                    <dt class="description__text description__text--bold">Продолжительность:</dt>
+                    <dd class="description__text">13 ч. 0 мин</dd>
+                  </dl>
+                </div>
+                <div class="card__price price">
+                  <p class="price__value price__value--current">14 800 руб.</p>
+                </div>
+              </div>
+            </section>
+            <section class="card catalog__card catalog__card--desktop">
+              <div class="card__pictures"><img class="card__img card__img--dsk" src="images/abrau-d.jpg" alt="Абрау-Дюрсо"></div>
+              <div class="card__content">
+                <h2 class="card__title"><a class="card__link" href="#">Морская прогулка в Абрау-Дюрсо</a></h2>
+                <div class="card__description description">
+                  <dl class="description__row">
+                    <dt class="description__text description__text--bold">Маршрут:</dt>
+                    <dd class="description__text">Cочи-Абрау-Дюрсо</dd>
+                  </dl>
+                  <dl class="description__row">
+                    <dt class="description__text description__text--bold">Продолжительность:</dt>
+                    <dd class="description__text">11 ч. 0 мин</dd>
+                  </dl>
+                </div>
+                <div class="card__price price">
+                  <p class="price__value price__value--current">14 800 руб.</p>
+                </div>
+              </div>
+            </section>
+          </div><a class="btn catalog__btn main-content__btn" href="#">Больше круизов</a>
+        </div>
+      </div>
+    </main>
+    <footer class="site__footer page-footer">
+      <div class="container">
+        <div class="page-footer__inner">
+          <ul class="page-footer__menu menu">
+                    <li class="menu__item"><a class="menu__link" href="#">Вход для партнеров</a></li>
+                    <li class="menu__item"><a class="menu__link" href="#">О компании</a></li>
+                    <li class="menu__item"><a class="menu__link" href="#">Контакты</a></li>
+          </ul>
+          <div class="page-footer__social social">
+            <h3 class="social__caption">Будь на связи:</h3>
+            <div class="social__buttons"><a class="btn social__btn social__btn--vk" href="#">Вконтакте</a><a class="btn social__btn social__btn--ok" href="#">Одноклассники</a><a class="btn social__btn social__btn--youtube" href="#">Ютуб</a><a class="btn social__btn social__btn--inst" href="#">Инстаграм</a></div>
+          </div>
+          <div class="page-footer__wrapper">
+            <div class="page-footer__contacts contacts"><a class="contacts__phone" href="tel:88005006105">8 800 500-61-05</a>
+              <p class="contacts__text">Круглосуточная поддержка</p>
+            </div>
+            <div class="page-footer__copyright copyright">
+              <p class="copyright__text">&copy; 2016 OOO &laquo;Городские Круизы&raquo;</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  <script type="text/javascript" src="main.js"></script></body>
+</html>
