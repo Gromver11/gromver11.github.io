@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Web Share API — Тест в Opera</title>
+  <title>📤 Web Share API — с резервом</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -39,27 +39,36 @@
       border-radius: 6px;
       font-size: 16px;
     }
+    .section {
+      margin: 20px 0;
+      padding: 15px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
   </style>
 </head>
 <body>
-  <h1>📤 Тест Web Share API</h1>
-  <p>Проверка поддержки передачи PDF-файла в Opera</p>
+  <h1>📤 Поделиться PDF</h1>
+  <p>Система попробует сначала отправить файл, затем — ссылку.</p>
 
-  <!-- Результаты проверки -->
-  <p><strong>navigator.share:</strong> <span id="shareSupport">...</span></p>
-  <p><strong>navigator.canShare:</strong> <span id="canShareSupport">...</span></p>
-  <p><strong>canShare({ files }):</strong> <span id="canShareFiles">...</span></p>
+  <div class="section">
+    <p><strong>navigator.share:</strong> <span id="shareSupport">...</span></p>
+    <p><strong>navigator.canShare:</strong> <span id="canShareSupport">...</span></p>
+    <p><strong>canShare({ files }):</strong> <span id="canShareFiles">...</span></p>
+  </div>
 
-  <!-- Кнопка шаринга -->
-  <button id="shareBtn" disabled>Поделиться PDF</button>
+  <button id="shareBtn" disabled>Поделиться</button>
+  <p id="status" class="info">Проверка поддержки...</p>
 
-  <!-- Статус -->
-  <p id="status" class="info">Проверка...</p>
+  <div id="fallbackDownload" style="display: none;">
+    <p class="warn">Не удалось отправить. Скачайте файл и поделитесь вручную.</p>
+    <a id="downloadLink" class="download-link" href="#" download="document.pdf">⬇️ Скачать PDF (1 КБ)</a>
+  </div>
 
-  <!-- Fallback -->
-  <div id="fallback" style="display: none;">
-    <p class="warn">Браузер не поддерживает отправку файлов напрямую.</p>
-    <a id="downloadLink" class="download-link" href="#" target="_blank">Скачать PDF и поделиться вручную</a>
+  <div id="fallbackUrl" style="display: none;">
+    <p class="warn">Файл не отправлен. Попробуйте поделиться ссылкой.</p>
+    <button id="shareUrlBtn">🔗 Поделиться ссылкой на PDF</button>
   </div>
 
   <script>
@@ -68,10 +77,18 @@
     const canShareFiles = document.getElementById("canShareFiles");
     const status = document.getElementById("status");
     const button = document.getElementById("shareBtn");
-    const fallback = document.getElementById("fallback");
+    const fallbackDownload = document.getElementById("fallbackDownload");
+    const fallbackUrl = document.getElementById("fallbackUrl");
     const downloadLink = document.getElementById("downloadLink");
+    const shareUrlBtn = document.getElementById("shareUrlBtn");
 
-    // Создаём простой PDF (валидный бинарный массив)
+    // === Настройки: укажите прямую ссылку на PDF ===
+    // 🔗 Загрузите test-document.pdf на GitHub Pages и вставьте URL
+    const PDF_URL = "https://gromver11.github.io/share/test-document.pdf";
+    const PDF_TITLE = "Документ для вас";
+    const PDF_TEXT = "Вот ваш PDF-файл";
+
+    // Создаём минимальный валидный PDF (как Blob)
     const pdfArray = new Uint8Array([
       0x25, 0x50, 0x44, 0x46, 0x2D, 0x31, 0x2E, 0x35, 0x0A,
       0x25, 0xC4, 0xE5, 0xF2, 0xE5, 0xEA, 0xA7, 0x20, 0x0A,
@@ -80,11 +97,9 @@
     ]);
 
     const pdfBlob = new Blob([pdfArray], { type: 'application/pdf' });
-    const file = new File([pdfBlob], 'test-document.pdf', { type: 'application/pdf' });
+    const file = new File([pdfBlob], 'document.pdf', { type: 'application/pdf' });
 
     // === ПРОВЕРКИ ===
-
-    // 1. navigator.share
     if (navigator.share) {
       shareSupport.textContent = "✅ да";
       shareSupport.className = "success";
@@ -95,7 +110,6 @@
       status.className = "error";
     }
 
-    // 2. navigator.canShare
     if (navigator.canShare) {
       canShareSupport.textContent = "✅ да";
       canShareSupport.className = "success";
@@ -104,62 +118,57 @@
       canShareSupport.className = "error";
     }
 
-    // 3. canShare({ files })
-    if (navigator.canShare) {
-      const result = navigator.canShare({ files: [file] });
-      if (result) {
-        canShareFiles.textContent = "✅ да";
-        canShareFiles.className = "success";
-        button.disabled = false;
-        status.textContent = "Готово. Нажмите, чтобы поделиться PDF.";
-        status.className = "success";
-      } else {
-        canShareFiles.textContent = "❌ нет";
-        canShareFiles.className = "error";
-        status.textContent = "Передача файлов не поддерживается (требуется Android 10+).";
-        status.className = "error";
-      }
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      canShareFiles.textContent = "✅ да";
+      canShareFiles.className = "success";
+      button.disabled = false;
+      status.textContent = "Готово. Попробуем поделиться файлом.";
+      status.className = "success";
     } else {
-      canShareFiles.textContent = "❌ navigator.canShare не поддерживается";
+      canShareFiles.textContent = "❌ нет";
       canShareFiles.className = "error";
-      status.textContent = "navigator.canShare не доступен.";
+      status.textContent = "Передача файлов не поддерживается.";
       status.className = "error";
+      fallbackUrl.style.display = "block";
     }
 
-    // === КНОПКА ШАРИНГА ===
+    // === ОСНОВНОЙ ШАРИНГ (файл → ссылка → скачивание) ===
     button.addEventListener("click", async () => {
-      status.textContent = "Выполняется...";
-      status.className = "info";
+      status.textContent = "Попытка 1: отправка файла...";
       try {
-        await navigator.share({
-          title: "Тестовый PDF",
-          text: "Вот ваш PDF-документ",
-          files: [file]
-        });
-        status.textContent = "✅ Успешно поделено!";
+        await navigator.share({ title: PDF_TITLE, text: PDF_TEXT, files: [file] });
+        status.textContent = "✅ Файл успешно отправлен!";
         status.className = "success";
       } catch (err) {
-        if (err.name === "AbortError") {
-          status.textContent = "Отменено пользователем.";
-        } else {
-          status.textContent = `❌ Ошибка: ${err.message}`;
-        }
+        status.textContent = "❌ Файл не отправлен. Пробуем ссылку...";
         status.className = "error";
-        showFallback();
+        try {
+          await navigator.share({ title: PDF_TITLE, text: PDF_TEXT, url: PDF_URL });
+          status.textContent = "✅ Ссылка отправлена!";
+          status.className = "success";
+        } catch (err2) {
+          status.textContent = "❌ Не удалось отправить ни файл, ни ссылку.";
+          status.className = "error";
+          fallbackDownload.style.display = "block";
+        }
       }
     });
 
-    // === FALLBACK ===
-    function showFallback() {
-      fallback.style.display = "block";
-      downloadLink.href = URL.createObjectURL(file);
-      downloadLink.download = "test-document.pdf";
-    }
+    // === ШАРИНГ ССЫЛКИ ===
+    shareUrlBtn?.addEventListener("click", async () => {
+      try {
+        await navigator.share({ title: PDF_TITLE, text: PDF_TEXT, url: PDF_URL });
+        status.textContent = "✅ Ссылка отправлена!";
+        status.className = "success";
+      } catch (err) {
+        status.textContent = "❌ Ошибка при отправке ссылки.";
+        status.className = "error";
+        fallbackDownload.style.display = "block";
+      }
+    });
 
-    // Если canShare нет или вернул false — сразу показываем fallback
-    if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
-      showFallback();
-    }
+    // === СКАЧИВАНИЕ ===
+    downloadLink.href = URL.createObjectURL(file);
   </script>
 </body>
 </html>
