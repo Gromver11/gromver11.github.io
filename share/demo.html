@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📤 Web Share API — Детальный отчёт</title>
+  <title>📤 Тест: Web Share TXT</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -29,7 +29,7 @@
       font-size: 18px;
       padding: 12px 24px;
       margin: 10px;
-      background-color: #d32f2f;
+      background-color: #1976d2;
       color: white;
       border: none;
       border-radius: 6px;
@@ -53,24 +53,24 @@
   </style>
 </head>
 <body>
-  <h1>📤 Web Share API — Детальный тест</h1>
-  <p>Все действия и ошибки выводятся на экран. Нет нужды в консоли.</p>
+  <h1>📤 Тест: передача TXT-файла</h1>
+  <p>Проверка, можно ли поделиться <strong>.txt</strong> файлом в Opera</p>
 
   <!-- 1. Поддержка API -->
   <div class="section">
-    <h3>🔍 Поддержка Web Share API</h3>
+    <h3>🔍 Поддержка</h3>
     <p><strong>navigator.share:</strong> <span id="shareSupport">Проверяется...</span></p>
     <p><strong>navigator.canShare:</strong> <span id="canShareSupport">Проверяется...</span></p>
-    <p><strong>canShare({ files }):</strong> <span id="canShareFiles">Проверяется...</span></p>
+    <p><strong>canShare({ files }) для .txt:</strong> <span id="canShareFiles">Проверяется...</span></p>
   </div>
 
-  <!-- 2. Кнопка шаринга -->
-  <button id="shareBtn" disabled>📤 Поделиться файлом</button>
+  <!-- 2. Кнопка -->
+  <button id="shareBtn" disabled>📤 Поделиться TXT-файлом</button>
   <button id="shareUrlBtn" class="hidden">🔗 Поделиться ссылкой</button>
 
-  <!-- 3. Статус и логи -->
+  <!-- 3. Статус и ошибка -->
   <div class="section">
-    <h3>📊 Статус операции</h3>
+    <h3>📊 Результат</h3>
     <p id="status" class="info">Ожидание...</p>
     <div id="errorDetails" class="hidden">
       <h4>📋 Детали ошибки:</h4>
@@ -80,13 +80,13 @@
 
   <!-- 4. Fallback -->
   <div id="fallbackDownload" class="section hidden">
-    <p class="warn">❌ Не удалось отправить файл или ссылку.</p>
-    <a id="downloadLink" class="button" href="#" download="document.pdf">⬇️ Скачать PDF</a>
+    <p class="warn">❌ Не удалось отправить. Скачайте вручную.</p>
+    <a id="downloadLink" class="button" href="#" download="web-share-test.txt">⬇️ Скачать web-share-test.txt</a>
   </div>
 
-  <!-- 5. Системная информация -->
+  <!-- 5. Информация о системе -->
   <div class="section">
-    <h3>📱 Информация о браузере</h3>
+    <h3>📱 Система</h3>
     <p><strong>User Agent:</strong> <span id="userAgent">—</span></p>
     <p><strong>Платформа:</strong> <span id="platform">—</span></p>
     <p><strong>HTTPS:</strong> <span id="isSecure">—</span></p>
@@ -113,71 +113,38 @@
     platformEl.textContent = navigator.platform || "неизвестно";
     isSecureEl.textContent = window.isSecureContext ? "✅ да" : "❌ нет";
     if (!window.isSecureContext) {
-      status.textContent = "❌ Ошибка: сайт должен работать по HTTPS или localhost";
+      status.textContent = "❌ Ошибка: требуется HTTPS";
       status.className = "error";
     }
 
-    // === Настройки ===
-    const PDF_TITLE = "Тестовый документ";
-    const PDF_TEXT = "Вот ваш PDF-файл, созданный через Web Share API";
-    const PDF_URL = window.location.origin + "/document.pdf"; // ← Замените на реальный URL, если нужно
+    // === Данные TXT-файла ===
+    const now = new Date().toLocaleString("ru-RU");
+    const txtContent = `Тест Web Share API — TXT-файл
+Создано: ${now}
 
-    // === Создаём PDF как Blob ===
-    const date = new Date().toLocaleString("ru-RU");
-    const pdfContent = `
-%PDF-1.4
-1 0 obj
-<< /Type /Catalog /Pages 2 0 R >>
-endobj
-2 0 obj
-<< /Type /Pages /Kids [3 0 R] /Count 1 >>
-endobj
-3 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
-   /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
-endobj
-4 0 obj
-<< /Length 133 >>
-stream
-BT
-/F1 20 Tf
-72 720 Td
-(Тест Web Share API) Tj
-T* ( ) Tj
-T* (Файл сгенерирован) Tj
-T* (Дата: ${date}) Tj
-ET
-endstream
-endobj
-5 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Name /F1 >>
-endobj
-xref
-0 6
-0000000000 65535 f 
-0000000010 00000 n 
-0000000078 00000 n 
-0000000165 00000 n 
-0000000350 00000 n 
-0000000460 00000 n 
-trailer
-<< /Size 6 /Root 1 0 R >>
-startxref
-570
-%%EOF
-    `.trim();
+Браузер: ${navigator.userAgent}
+Платформа: ${navigator.platform}
 
-    const pdfBlob = new Blob([pdfContent], { type: 'application/pdf' });
-    const file = new File([pdfBlob], 'web-share-test.pdf', { type: 'application/pdf' });
+Это простой текстовый файл для проверки передачи через navigator.share({ files }).
 
-    // === Проверки поддержки ===
+Если вы это читаете — файл был успешно передан или скачан.`;
+
+    const blob = new Blob([txtContent], { type: "text/plain" });
+    const file = new File([blob], "web-share-test.txt", { type: "text/plain" });
+
+    // === Настройки шаринга ===
+    const SHARE_TITLE = "Тестовый TXT";
+    const SHARE_TEXT = "Вот текстовый файл";
+    const SHARE_URL = window.location.origin + "/web-share-test.txt"; // ← замените на реальный URL, если нужно
+
+    // === Проверки ===
     if (navigator.share) {
       shareSupport.textContent = "✅ да";
       shareSupport.className = "success";
     } else {
       shareSupport.textContent = "❌ нет";
       shareSupport.className = "error";
-      status.textContent = "Web Share API не поддерживается в этом браузере.";
+      status.textContent = "Web Share API не поддерживается.";
       status.className = "error";
     }
 
@@ -193,7 +160,7 @@ startxref
       canShareFiles.textContent = "✅ да";
       canShareFiles.className = "success";
       button.disabled = false;
-      status.textContent = "Готово. Нажмите, чтобы поделиться PDF.";
+      status.textContent = "Готово. Нажмите, чтобы поделиться .txt файлом.";
       status.className = "success";
     } else if (navigator.canShare) {
       canShareFiles.textContent = "❌ нет";
@@ -207,7 +174,7 @@ startxref
       shareUrlBtn.classList.remove("hidden");
     }
 
-    // === Функция: показать ошибку ===
+    // === Показ ошибки ===
     function showError(message, error = null) {
       status.textContent = `❌ Ошибка: ${message}`;
       status.className = "error";
@@ -225,23 +192,22 @@ startxref
       errorOutput.textContent = details;
     }
 
-    // === Кнопка: поделиться файлом ===
+    // === Кнопка: поделиться TXT-файлом ===
     button.addEventListener("click", async () => {
-      status.textContent = "🔄 Попытка поделиться файлом...";
+      status.textContent = "🔄 Попытка поделиться .txt файлом...";
       status.className = "info";
       errorDetails.classList.add("hidden");
 
       try {
         await navigator.share({
-          title: PDF_TITLE,
-          text: PDF_TEXT,
+          title: SHARE_TITLE,
+          text: SHARE_TEXT,
           files: [file]
         });
         status.textContent = "✅ Успешно! Файл отправлен.";
         status.className = "success";
       } catch (err) {
-        showError("Не удалось поделиться файлом", err);
-        // Показываем кнопку "ссылка"
+        showError("Не удалось поделиться .txt файлом", err);
         shareUrlBtn.classList.remove("hidden");
       }
     });
@@ -254,11 +220,11 @@ startxref
 
       try {
         await navigator.share({
-          title: PDF_TITLE,
-          text: PDF_TEXT,
-          url: PDF_URL
+          title: SHARE_TITLE,
+          text: SHARE_TEXT,
+          url: SHARE_URL
         });
-        status.textContent = "✅ Успешно! Ссылка отправлена.";
+        status.textContent = "✅ Ссылка отправлена.";
         status.className = "success";
       } catch (err) {
         showError("Не удалось поделиться ссылкой", err);
