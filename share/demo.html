@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Share PDF via Web Share API</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    button {
+      font-size: 18px;
+      padding: 12px 24px;
+      margin: 20px;
+      background-color: #d32f2f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .error { color: red; }
+    .success { color: green; }
+    .info { color: #555; }
+  </style>
+</head>
+<body>
+  <h1>📤 Тест: отправка PDF через Web Share API</h1>
+  <p>Попробуйте поделиться PDF и выбрать <strong>Gmail</strong></p>
+
+  <button id="shareBtn">Поделиться PDF</button>
+
+  <p id="status" class="info">Проверка поддержки...</p>
+
+  <script>
+    const button = document.getElementById("shareBtn");
+    const status = document.getElementById("status");
+
+    // Простой PDF: "Hello, this is a test PDF"
+    // Это минимальный валидный PDF (упрощённая версия)
+    const pdfContent = `
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 44 >>
+stream
+BT
+/F1 24 Tf
+72 720 Td
+(Hello from Web Share API!) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Name /F1 >>
+endobj
+6 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 /Resources << /Font << /F1 5 0 R >> >> /MediaBox [0 0 612 792] >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000010 00000 n 
+0000000078 00000 n 
+0000000165 00000 n 
+0000000300 00000 n 
+0000000410 00000 n 
+0000000500 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+590
+%%EOF
+    `.trim();
+
+    // Создаём Blob из строки PDF
+    const pdfBlob = new Blob([pdfContent], { type: 'application/pdf' });
+    const fileName = 'test-document.pdf';
+
+    // Проверка поддержки Web Share и файлов
+    if (!navigator.share) {
+      status.textContent = 'Web Share API не поддерживается.';
+      status.className = 'error';
+      button.disabled = true;
+      return;
+    }
+
+    // Проверка, можно ли поделиться файлом
+    const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+    if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
+      status.textContent = 'Передача файлов через Web Share не поддерживается (требуется Android 10+).';
+      status.className = 'error';
+      button.disabled = true;
+      return;
+    }
+
+    status.textContent = 'Готово. Нажмите, чтобы поделиться PDF.';
+    status.className = 'success';
+
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.share({
+          title: 'Документ для вас',
+          text: 'Вот запрошенный PDF-файл.',
+          files: [file]
+        });
+        status.textContent = '✅ Успешно поделено!';
+        status.className = 'success';
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          status.textContent = 'Отменено пользователем.';
+        } else {
+          status.textContent = `❌ Ошибка: ${err.message}`;
+          console.error('Share error:', err);
+        }
+        status.className = 'error';
+      }
+    });
+  </script>
+</body>
+</html>
