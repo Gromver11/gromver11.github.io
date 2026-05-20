@@ -199,11 +199,10 @@
       errorDetails.classList.add("hidden");
 
       try {
-      await navigator.share({
-        title: 'Текстовый файл',
-        text: 'Содержимое:\n\n' + txtContent
-        });
-    
+    await navigator.share({
+      title: 'Текстовый файл',
+      text: 'Содержимое:\n\n' + txtContent
+    });
         status.textContent = "✅ Успешно! Файл отправлен.";
         status.className = "success";
       } catch (err) {
